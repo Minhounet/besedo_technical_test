@@ -1,14 +1,13 @@
 package com.qmt.besedo.controller;
 
+import com.qmt.besedo.model.operator.SearchOperator;
 import com.qmt.besedo.model.response.Response;
+import com.qmt.besedo.service.GetMessage;
 import com.qmt.besedo.service.InjectMessage;
 import com.qmt.besedo.model.message.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.ByteArrayOutputStream;
 
@@ -21,8 +20,8 @@ import static io.vavr.API.TODO;
 @RestController
 public class ApplicationController {
 
-
     private final InjectMessage injectMessage;
+    private final GetMessage getMessage;
 
     @PostMapping("mails")
     public ResponseEntity<Response> injectMessage(@RequestBody Message message) {
@@ -30,8 +29,10 @@ public class ApplicationController {
     }
 
     @GetMapping("mails")
-    public ResponseEntity<String> getMails() {
-        return TODO("get mails using possible filters (like operator ?");
+    public ResponseEntity<Response> getMails(@RequestParam String attribute,
+                                             @RequestParam(required = false) SearchOperator operator,
+                                             @RequestParam String value) {
+        return getMessage.getMessages(attribute, operator, value);
     }
 
     @GetMapping("report")
