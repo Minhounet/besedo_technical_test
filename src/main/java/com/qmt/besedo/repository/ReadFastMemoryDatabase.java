@@ -1,11 +1,16 @@
 package com.qmt.besedo.repository;
 
-import com.qmt.besedo.model.Message;
+import com.qmt.besedo.model.message.Message;
+import com.qmt.besedo.model.SearchOperator;
 import io.vavr.control.Try;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Function;
+import java.util.function.Predicate;
+
+import static java.util.stream.Collectors.toList;
 
 @Repository
 public class ReadFastMemoryDatabase implements MessageDao {

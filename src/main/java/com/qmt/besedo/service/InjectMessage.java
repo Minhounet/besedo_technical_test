@@ -1,9 +1,10 @@
 package com.qmt.besedo.service;
 
-import com.qmt.besedo.model.Message;
+import com.qmt.besedo.model.message.Message;
+import com.qmt.besedo.model.response.Response;
 import org.springframework.http.ResponseEntity;
 
 public interface InjectMessage {
 
-    ResponseEntity<String> inject(Message message);
+    ResponseEntity<Response> inject(Message message);
 }

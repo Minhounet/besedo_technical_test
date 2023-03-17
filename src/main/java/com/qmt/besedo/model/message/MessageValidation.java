@@ -1,4 +1,4 @@
-package com.qmt.besedo.model;
+package com.qmt.besedo.model.message;
 
 import io.vavr.Tuple;
 import io.vavr.Tuple2;

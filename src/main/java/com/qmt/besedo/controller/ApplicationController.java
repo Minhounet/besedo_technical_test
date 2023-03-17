@@ -1,7 +1,8 @@
 package com.qmt.besedo.controller;
 
+import com.qmt.besedo.model.response.Response;
 import com.qmt.besedo.service.InjectMessage;
-import com.qmt.besedo.model.Message;
+import com.qmt.besedo.model.message.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +25,7 @@ public class ApplicationController {
     private final InjectMessage injectMessage;
 
     @PostMapping("mails")
-    public ResponseEntity<String> createMail(@RequestBody Message message) {
+    public ResponseEntity<Response> injectMessage(@RequestBody Message message) {
         return injectMessage.inject(message);
     }
 
