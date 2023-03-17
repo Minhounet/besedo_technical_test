@@ -15,6 +15,9 @@ repositories {
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("io.freefair.lombok:io.freefair.lombok.gradle.plugin:6.6.3")
+    implementation("io.vavr:vavr:0.10.4")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
