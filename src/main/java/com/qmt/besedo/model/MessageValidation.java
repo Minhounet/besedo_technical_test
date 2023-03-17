@@ -18,7 +18,7 @@ public class MessageValidation {
             Option.of(value)
                     .flatMap(v -> v.isBlank() ? Option.none() : Option.of(v));
 
-    public static Validation<Seq<String>, Message> requireValidMMail(Message message) {
+    public static Validation<Seq<String>, Message> requireValidMessage(Message message) {
         Validation<Seq<String>, Message> mailValidator = combine(requireIsNullOrIsSizeBetween(message.id(), 1, 100),
                 requireTitleOrBody(message.title(), message.body()),
                 requireValidEmail(message.email()))

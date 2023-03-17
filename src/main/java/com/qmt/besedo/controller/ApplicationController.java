@@ -22,7 +22,7 @@ public class ApplicationController {
 
     @PostMapping("mails")
     public ResponseEntity<String> createMail(@RequestBody Message message) {
-        Validation<Seq<String>, Message> mailValidation = requireValidMMail(message);
+        Validation<Seq<String>, Message> mailValidation = requireValidMessage(message);
         if (mailValidation.isValid()) {
             return ResponseEntity.ok().build();
         } else {
