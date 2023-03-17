@@ -1,8 +1,8 @@
 package com.qmt.besedo.controller;
 
+import com.qmt.besedo.business.InjectMessage;
 import com.qmt.besedo.model.Message;
-import io.vavr.collection.Seq;
-import io.vavr.control.Validation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,28 +11,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.ByteArrayOutputStream;
 
-import static com.qmt.besedo.model.MessageValidation.*;
 import static io.vavr.API.TODO;
 
 /**
  * Entry point to rest call.
  */
+@RequiredArgsConstructor
 @RestController
 public class ApplicationController {
 
+
+    private final InjectMessage injectMessage;
+
     @PostMapping("mails")
     public ResponseEntity<String> createMail(@RequestBody Message message) {
-        Validation<Seq<String>, Message> mailValidation = requireValidMessage(message);
-        if (mailValidation.isValid()) {
-            return ResponseEntity.ok().build();
-        } else {
-            String mergedErrors = mailValidation
-                    .getError()
-                    .reduce((a, b) -> a + "\n" + b);
-            return ResponseEntity
-                    .badRequest()
-                    .body(mergedErrors);
-        }
+        return injectMessage.inject(message);
     }
 
     @GetMapping("mails")
