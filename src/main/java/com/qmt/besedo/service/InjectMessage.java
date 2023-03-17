@@ -1,4 +1,4 @@
-package com.qmt.besedo.business;
+package com.qmt.besedo.service;
 
 import com.qmt.besedo.model.Message;
 import org.springframework.http.ResponseEntity;

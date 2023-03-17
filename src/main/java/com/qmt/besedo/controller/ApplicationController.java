@@ -1,6 +1,6 @@
 package com.qmt.besedo.controller;
 
-import com.qmt.besedo.business.InjectMessage;
+import com.qmt.besedo.service.InjectMessage;
 import com.qmt.besedo.model.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
