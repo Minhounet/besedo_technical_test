@@ -2,6 +2,7 @@ plugins {
     java
     id("org.springframework.boot") version "3.1.0-M1"
     id("io.spring.dependency-management") version "1.1.0"
+    id("io.freefair.lombok") version "8.0.0-rc2"
 }
 
 group = "com.qmt.besedo"
