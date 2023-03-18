@@ -10,8 +10,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static java.util.stream.Collectors.toList;
-
 @Repository
 public class InMemoryDatabase implements MessageDao {
 
@@ -38,7 +36,7 @@ public class InMemoryDatabase implements MessageDao {
             };
             return objects.stream()
                     .filter(doesValueMatch)
-                    .collect(toList());
+                    .toList();
         });
     }
 

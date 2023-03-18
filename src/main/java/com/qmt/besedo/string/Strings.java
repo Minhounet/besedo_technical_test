@@ -2,10 +2,12 @@ package com.qmt.besedo.string;
 
 import io.vavr.Function1;
 import io.vavr.control.Option;
+import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.StringUtils;
 
 import static java.lang.Math.toIntExact;
 
+@UtilityClass
 public class Strings {
 
     private static final Function1<String, Integer> INTERNAL_GET_VOWELS_COUNT = string -> {

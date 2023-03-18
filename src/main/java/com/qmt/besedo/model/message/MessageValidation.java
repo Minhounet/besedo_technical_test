@@ -8,6 +8,7 @@ import io.vavr.control.Validation;
 import lombok.experimental.UtilityClass;
 
 import java.util.function.Function;
+import java.util.function.ToIntFunction;
 
 import static io.vavr.control.Validation.*;
 
@@ -43,9 +44,9 @@ public class MessageValidation {
 
 
     private static Validation<String, String> requireIsNullOrIsSizeBetween(String value, int min, int max) {
-        Function<String, Integer> getSize = v -> v == null ? 0 : v.length();
-        var size = getSize.apply(value);
-        boolean b = size < min | size > max;
+        ToIntFunction<String> getSize = v -> v == null ? 0 : v.length();
+        var size = getSize.applyAsInt(value);
+        boolean b = size < min || size > max;
         if (b) {
             return invalid("id size is not valid, it should be between %d and %d (current size: %d)".formatted(min, max, size));
         } else {

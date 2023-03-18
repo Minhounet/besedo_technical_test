@@ -11,13 +11,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 @Log4j2
 @UtilityClass
 public class Responses {
 
-    private static final Function<String, String> GET_ERROR_MESSAGE = error -> null == error || error.isBlank() ? "Unexpected error" : error;
+    private static final UnaryOperator<String> GET_ERROR_MESSAGE = error -> null == error || error.isBlank() ? "Unexpected error" : error;
 
     public static <E> ResponseEntity<Response> buildResponseFromExecution(String successMessage,
                                                                    HttpStatus successStatus,

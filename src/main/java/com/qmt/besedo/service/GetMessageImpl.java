@@ -21,7 +21,7 @@ public class GetMessageImpl implements GetMessage {
 
     @Override
     public ResponseEntity<Response> getMessages(String attribute, SearchOperator searchOperator, String value) {
-        Function<Message, String> getAttribute = (mess) -> switch (attribute) {
+        Function<Message, String> getAttribute = mess -> switch (attribute) {
             case "id" -> mess.id();
             case "email" -> mess.email();
             case "title" -> mess.title();

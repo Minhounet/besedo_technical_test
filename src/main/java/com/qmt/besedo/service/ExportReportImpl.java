@@ -1,6 +1,7 @@
 package com.qmt.besedo.service;
 
 import com.qmt.besedo.csv.CSVWithOutput;
+import com.qmt.besedo.exception.ReportException;
 import com.qmt.besedo.repository.MessageDao;
 import com.qmt.besedo.string.Strings;
 import io.vavr.Tuple;
@@ -51,7 +52,7 @@ public class ExportReportImpl implements ExportReport {
                 try {
                     printer.getCsvPrinter().printRecord(entry._1, entry._2);
                 } catch (IOException e) {
-                    throw new RuntimeException("Error writing value " + entry._1 + ", " + entry._2);
+                    throw new ReportException("Error writing value " + entry._1 + ", " + entry._2, e);
                 }
             });
             printer.getCsvPrinter().flush();
