@@ -1,5 +1,6 @@
 package com.qmt.besedo.service;
 
+import com.qmt.besedo.configuration.CSVReportConfiguration;
 import com.qmt.besedo.csv.CSVWithOutput;
 import com.qmt.besedo.exception.ReportException;
 import com.qmt.besedo.repository.MessageDao;
@@ -24,6 +25,7 @@ import java.util.function.Function;
 @Component
 public class ExportReportImpl implements ExportReport {
 
+    private final CSVReportConfiguration csvReportConfiguration;
     private final MessageDao messageDao;
 
     @Override
@@ -47,7 +49,7 @@ public class ExportReportImpl implements ExportReport {
     }
 
     private Try<byte[]> writeCSV(List<Tuple2<String, Integer>> entries) {
-        return Try.withResources(CSVWithOutput::new).of(printer -> {
+        return Try.withResources(() -> new CSVWithOutput(csvReportConfiguration)).of(printer -> {
             entries.forEach(entry -> {
                 try {
                     printer.getCsvPrinter().printRecord(entry._1, entry._2);
