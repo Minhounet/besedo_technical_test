@@ -42,4 +42,9 @@ public class InMemoryDatabase implements MessageDao {
         });
     }
 
+    @Override
+    public List<Message> getObjects() {
+        return objects;
+    }
+
 }
