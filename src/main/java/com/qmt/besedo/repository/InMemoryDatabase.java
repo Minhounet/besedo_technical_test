@@ -10,6 +10,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+/**
+ * Basic database where objects are stored in {@link CopyOnWriteArrayList} to handle concurrency.
+ */
 @Repository
 public class InMemoryDatabase implements MessageDao {
 
