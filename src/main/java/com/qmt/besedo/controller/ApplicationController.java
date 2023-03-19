@@ -4,7 +4,7 @@ import com.qmt.besedo.model.operator.SearchOperator;
 import com.qmt.besedo.model.response.Response;
 import com.qmt.besedo.service.export.ExportReport;
 import com.qmt.besedo.service.search.SearchMessageService;
-import com.qmt.besedo.service.inject.InjectMessage;
+import com.qmt.besedo.service.inject.InjectMessageService;
 import com.qmt.besedo.model.message.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class ApplicationController {
 
-    private final InjectMessage injectMessage;
+    private final InjectMessageService injectMessageService;
     private final SearchMessageService searchMessageService;
     private final ExportReport exportReport;
 
     @PostMapping("mails")
     public ResponseEntity<Response> injectMessage(@RequestBody Message message) {
-        return injectMessage.inject(message);
+        return injectMessageService.inject(message);
     }
 
     @GetMapping("mails")

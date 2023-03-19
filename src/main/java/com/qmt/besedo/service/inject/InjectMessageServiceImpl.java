@@ -16,7 +16,7 @@ import static com.qmt.besedo.utility.Messages.REQUIRE_VALID_MESSAGE;
 
 @RequiredArgsConstructor
 @Service
-public class InjectMessageImpl implements InjectMessage {
+public class InjectMessageServiceImpl implements InjectMessageService {
 
     private final MessageDao messageDao;
 
@@ -30,7 +30,7 @@ public class InjectMessageImpl implements InjectMessage {
         } else {
             return buildResponseFromExecution("Message created successfully",
                     HttpStatus.CREATED,
-                    "Error when injecting message",
+                    "Error when injecting message, please contact your administrator",
                     HttpStatus.INTERNAL_SERVER_ERROR,
                     messageDao.injectMessage(message));
         }
