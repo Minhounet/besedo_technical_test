@@ -11,8 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import static com.qmt.besedo.utility.Messages.requireValidMessage;
 import static com.qmt.besedo.response.Responses.buildResponseFromExecution;
+import static com.qmt.besedo.utility.Messages.REQUIRE_VALID_MESSAGE;
 
 @RequiredArgsConstructor
 @Service
@@ -22,7 +22,7 @@ public class InjectMessageImpl implements InjectMessage {
 
     @Override
     public ResponseEntity<Response> inject(Message message) {
-        Validation<Seq<String>, Message> mailValidation = requireValidMessage(message);
+        Validation<Seq<String>, Message> mailValidation = REQUIRE_VALID_MESSAGE.apply(message);
         if (mailValidation.isInvalid()) {
             return ResponseEntity
                     .badRequest()

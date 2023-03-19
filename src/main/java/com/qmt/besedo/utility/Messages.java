@@ -1,62 +1,71 @@
 package com.qmt.besedo.utility;
 
 import com.qmt.besedo.model.message.Message;
-import io.vavr.Tuple;
-import io.vavr.Tuple2;
+import io.vavr.Function3;
+import io.vavr.collection.List;
 import io.vavr.collection.Seq;
-import io.vavr.control.Option;
 import io.vavr.control.Validation;
 import lombok.experimental.UtilityClass;
+import org.apache.commons.validator.routines.EmailValidator;
 
 import java.util.function.Function;
-import java.util.function.ToIntFunction;
 
+import static com.qmt.besedo.utility.Strings.GET_SIZE;
 import static io.vavr.control.Validation.*;
 
+/**
+ * Utility for {@link Messages} objects.
+ */
 @UtilityClass
 public class Messages {
 
-    private static final Function<String, Option<String>> GET_NON_EMPTY_VALUE = value ->
-            Option.of(value)
-                    .flatMap(v -> v.isBlank() ? Option.none() : Option.of(v));
+    private static final Function<Message, Validation<Seq<String>, Message>> REQUIRE_NON_NULL_MESSAGE =
+            message -> null == message ? invalid(List.of("Message cannot be null")) : valid(message);
+    private static final Function3<String, Integer, Integer, Validation<String, String>> REQUIRE_VALUE_SIZE_BETWEEN =
+            (value, min, max) -> {
+                var size = GET_SIZE.applyAsInt(value);
+                boolean b = size < min || size > max;
+                if (b) {
+                    return invalid("id size is not valid, it should be between %d and %d (current size: %d)".formatted(min, max, size));
+                } else {
+                    return valid(value);
+                }
+            };
 
-    public static Validation<Seq<String>, Message> requireValidMessage(Message message) {
-        Validation<Seq<String>, Message> mailValidator = combine(requireIsNullOrIsSizeBetween(message.id(), 1, 100),
-                requireTitleOrBody(message.title(), message.body()),
-                requireValidEmail(message.email()))
-                .ap((id, mailAndBody, email) -> message);
-        if (mailValidator.isValid()) {
-            return valid(message);
-        } else {
-            return invalid(mailValidator.getError());
-        }
-    }
+    /**
+     * Test if mail is non-blank and if it is valid.
+     */
+    private static final Function<String, Validation<String, String>> REQUIRE_VALID_EMAIL = mail -> {
+        Function<String, Validation<String, String>> validMail = m -> {
+            if (EmailValidator.getInstance().isValid(mail)) {
+                return valid(mail);
+            } else {
+                return invalid("Mail is not valid");
+            }
+        };
 
-    private static Validation<String, String> requireIsNullOrIsSizeBetween(String value, int min, int max) {
-        ToIntFunction<String> getSize = v -> v == null ? 0 : v.length();
-        var size = getSize.applyAsInt(value);
-        boolean b = size < min || size > max;
-        if (b) {
-            return invalid("id size is not valid, it should be between %d and %d (current size: %d)".formatted(min, max, size));
-        } else {
-            return valid(value);
-        }
-    }
-
-    private static Validation<String, Tuple2<String, String>> requireTitleOrBody(String title, String body) {
-        Option<String> titleOpt = GET_NON_EMPTY_VALUE.apply(title);
-        Option<String> bodyOpt = GET_NON_EMPTY_VALUE.apply(body);
-
-        if (titleOpt.isEmpty() && bodyOpt.isEmpty()) {
-            return invalid("title and body are not defined, one of them must be defined at least");
-        } else {
-            return valid(Tuple.of(title, body));
-        }
-    }
-
-    private static Validation<String, String> requireValidEmail(String mail) {
-        return GET_NON_EMPTY_VALUE
+        return Strings.GET_NON_EMPTY_VALUE
                 .apply(mail)
-                .fold(() -> invalid("Mail is mandatory"), Validation::valid);
-    }
+                .toValidation("Mail is mandatory and cannot be blank")
+                .flatMap(validMail);
+    };
+
+
+    /**
+     * <p>Validate the {@link Message} testing all its field.</p>
+     * <ul>
+     *     <li>id length must be between 1 and 100 (this makes it mandatory as null id is considered as length equals to 0</li>
+     *     <li>Title or body must be existing and non blank</li>
+     *     <li>mail is mandatory and must be valid</li>
+     * </ul>
+     */
+    public static final Function<Message, Validation<Seq<String>, Message>> REQUIRE_VALID_MESSAGE = message ->
+            REQUIRE_NON_NULL_MESSAGE
+                    .apply(message)
+                    .flatMap(mess -> combine(REQUIRE_VALUE_SIZE_BETWEEN.apply(mess.id(), 1, 100),
+                            Strings.REQUIRE_ONE_NON_BLANK_FROM_TWO.apply(mess.title(), mess.body(), "title and body are not defined, one of them must be defined at least"),
+                            REQUIRE_VALID_EMAIL.apply(mess.email()))
+                            .ap((id, mailAndBody, email) -> mess));
+
+
 }
