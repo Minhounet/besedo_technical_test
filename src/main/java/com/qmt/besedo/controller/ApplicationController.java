@@ -16,25 +16,26 @@ import org.springframework.web.bind.annotation.*;
  */
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/api/v1")
 public class ApplicationController {
 
     private final InjectMessageService injectMessageService;
     private final SearchMessageService searchMessageService;
     private final ExportReportService exportReportService;
 
-    @PostMapping("mails")
+    @PostMapping("/messages")
     public ResponseEntity<Response> injectMessage(@RequestBody Message message) {
         return injectMessageService.inject(message);
     }
 
-    @GetMapping("mails")
+    @GetMapping("/messages")
     public ResponseEntity<Response> getMails(@RequestParam String attribute,
                                              @RequestParam(required = false) SearchOperator operator,
                                              @RequestParam String value) {
         return searchMessageService.getMessages(attribute, operator, value);
     }
 
-    @GetMapping("reports/csv")
+    @GetMapping("/reports/csv")
     public ResponseEntity<ByteArrayResource> getCSVReport() {
         return exportReportService.getCVSReport();
     }

@@ -18,6 +18,9 @@ dependencies {
     // Spring
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.4")
+    implementation("org.springframework.boot:spring-boot-starter-validation:3.0.4")
+
     // Lombok
     implementation("io.freefair.lombok:io.freefair.lombok.gradle.plugin:6.6.3")
     annotationProcessor ("org.projectlombok:lombok:1.18.26")
