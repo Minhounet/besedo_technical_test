@@ -2,7 +2,7 @@ package com.qmt.besedo.controller;
 
 import com.qmt.besedo.model.operator.SearchOperator;
 import com.qmt.besedo.model.response.Response;
-import com.qmt.besedo.service.export.ExportReport;
+import com.qmt.besedo.service.export.ExportReportService;
 import com.qmt.besedo.service.search.SearchMessageService;
 import com.qmt.besedo.service.inject.InjectMessageService;
 import com.qmt.besedo.model.message.Message;
@@ -20,7 +20,7 @@ public class ApplicationController {
 
     private final InjectMessageService injectMessageService;
     private final SearchMessageService searchMessageService;
-    private final ExportReport exportReport;
+    private final ExportReportService exportReportService;
 
     @PostMapping("mails")
     public ResponseEntity<Response> injectMessage(@RequestBody Message message) {
@@ -36,7 +36,7 @@ public class ApplicationController {
 
     @GetMapping("reports/csv")
     public ResponseEntity<ByteArrayResource> getCSVReport() {
-        return exportReport.getCVSReport();
+        return exportReportService.getCVSReport();
     }
 
 }

@@ -1,6 +1,7 @@
 package com.qmt.besedo.service.export;
 
 import com.qmt.besedo.exception.ReportException;
+import com.qmt.besedo.model.message.Message;
 import com.qmt.besedo.repository.MessageDao;
 import com.qmt.besedo.service.export.csv.CSVReportConfiguration;
 import com.qmt.besedo.service.export.csv.CSVWithOutput;
@@ -23,23 +24,43 @@ import java.util.function.Function;
 @Log4j2
 @RequiredArgsConstructor
 @Component
-public class ExportReportImpl implements ExportReport {
+public class ExportReportServiceImpl implements ExportReportService {
 
     private final CSVReportConfiguration csvReportConfiguration;
     private final MessageDao messageDao;
 
     @Override
     public ResponseEntity<ByteArrayResource> getCVSReport() {
-        List<Tuple2<String, Integer>> entries = messageDao.getObjects().stream()
-                .map(message -> Tuple.of(message.id(), Strings.GET_VOWELS_COUNT.apply(message.body())))
+        Function<MessageDao, List<Message>> getAllMessages = dao ->  dao.getObjects()
+                .getOrElseThrow(cause -> new ReportException("Error when getting all objects", cause)).stream()
                 .toList();
 
-        return writeCSV(entries)
-                .onFailure(cause -> log.error("Error when writing csv report", cause))
-                .fold(ignored -> ResponseEntity.internalServerError().body(null),
-                        buildResponseWithCSV());
+        Function<List<Message>, List<Tuple2<String, Integer>>> enrichMessagesWithVowelsCount = messages ->
+                messages.stream()
+                        .map(message -> Tuple.of(message.id(), Strings.GET_VOWELS_COUNT.apply(message.body())))
+                        .toList();
+
+        Function<List<Tuple2<String, Integer>>, byte[]> writeEntriesToBytes = entries ->
+                writeCSV(entries).getOrElseThrow(cause -> new ReportException("Error when writing csv report", cause));
+
+        Function<byte[], ResponseEntity<ByteArrayResource>> buildResponse =  csvBytes -> ResponseEntity
+                .ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=report.csv")
+                .contentType(MediaType.parseMediaType("application/csv"))
+                .body(new ByteArrayResource(csvBytes));
+
+        return getAllMessages
+                .andThen(enrichMessagesWithVowelsCount)
+                .andThen(writeEntriesToBytes)
+                .andThen(buildResponse)
+                .apply(messageDao);
     }
 
+    /**
+     *
+     * @param entries List of {@link com.qmt.besedo.model.message.Message} coupled with its vowels count
+     * @return CSV as array of bytes.
+     */
     private Try<byte[]> writeCSV(List<Tuple2<String, Integer>> entries) {
         return Try.withResources(() -> new CSVWithOutput(csvReportConfiguration)).of(printer -> {
             entries.forEach(entry -> {
@@ -52,14 +73,6 @@ public class ExportReportImpl implements ExportReport {
             printer.getCsvPrinter().flush();
             return printer.getOutput().toByteArray();
         });
-    }
-
-    private Function<byte[], ResponseEntity<ByteArrayResource>> buildResponseWithCSV() {
-        return csvBytes -> ResponseEntity
-                .ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=report.csv")
-                .contentType(MediaType.parseMediaType("application/csv"))
-                .body(new ByteArrayResource(csvBytes));
     }
 
 }

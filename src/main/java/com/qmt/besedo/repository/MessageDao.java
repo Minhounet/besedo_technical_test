@@ -13,5 +13,5 @@ public interface MessageDao {
 
     Try<List<Message>> getMessageByAttribute(String value, SearchOperator operator, Function<Message, String> getFieldValue);
 
-    List<Message> getObjects();
+    Try<List<Message>> getObjects();
 }
