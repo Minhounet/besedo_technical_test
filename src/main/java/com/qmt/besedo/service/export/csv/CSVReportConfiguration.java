@@ -1,4 +1,4 @@
-package com.qmt.besedo.configuration;
+package com.qmt.besedo.service.export.csv;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

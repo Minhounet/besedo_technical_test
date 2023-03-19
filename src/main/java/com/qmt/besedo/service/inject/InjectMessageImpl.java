@@ -1,4 +1,4 @@
-package com.qmt.besedo.service;
+package com.qmt.besedo.service.inject;
 
 import com.qmt.besedo.model.message.Message;
 import com.qmt.besedo.model.response.ErrorResponse;
@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import static com.qmt.besedo.model.message.MessageValidation.requireValidMessage;
+import static com.qmt.besedo.utility.Messages.requireValidMessage;
 import static com.qmt.besedo.response.Responses.buildResponseFromExecution;
 
 @RequiredArgsConstructor

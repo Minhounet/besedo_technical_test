@@ -1,10 +1,10 @@
-package com.qmt.besedo.service;
+package com.qmt.besedo.service.export;
 
-import com.qmt.besedo.configuration.CSVReportConfiguration;
-import com.qmt.besedo.csv.CSVWithOutput;
 import com.qmt.besedo.exception.ReportException;
 import com.qmt.besedo.repository.MessageDao;
-import com.qmt.besedo.string.Strings;
+import com.qmt.besedo.service.export.csv.CSVReportConfiguration;
+import com.qmt.besedo.service.export.csv.CSVWithOutput;
+import com.qmt.besedo.utility.Strings;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
 import io.vavr.control.Try;
@@ -40,14 +40,6 @@ public class ExportReportImpl implements ExportReport {
                         buildResponseWithCSV());
     }
 
-    private Function<byte[], ResponseEntity<ByteArrayResource>> buildResponseWithCSV() {
-        return csvBytes -> ResponseEntity
-                .ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=report.csv")
-                .contentType(MediaType.parseMediaType("application/csv"))
-                .body(new ByteArrayResource(csvBytes));
-    }
-
     private Try<byte[]> writeCSV(List<Tuple2<String, Integer>> entries) {
         return Try.withResources(() -> new CSVWithOutput(csvReportConfiguration)).of(printer -> {
             entries.forEach(entry -> {
@@ -60,6 +52,14 @@ public class ExportReportImpl implements ExportReport {
             printer.getCsvPrinter().flush();
             return printer.getOutput().toByteArray();
         });
+    }
+
+    private Function<byte[], ResponseEntity<ByteArrayResource>> buildResponseWithCSV() {
+        return csvBytes -> ResponseEntity
+                .ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=report.csv")
+                .contentType(MediaType.parseMediaType("application/csv"))
+                .body(new ByteArrayResource(csvBytes));
     }
 
 }

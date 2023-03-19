@@ -1,6 +1,5 @@
-package com.qmt.besedo.csv;
+package com.qmt.besedo.service.export.csv;
 
-import com.qmt.besedo.configuration.CSVReportConfiguration;
 import lombok.Getter;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;

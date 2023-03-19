@@ -1,4 +1,4 @@
-package com.qmt.besedo.string;
+package com.qmt.besedo.utility;
 
 import io.vavr.Function1;
 import io.vavr.control.Option;

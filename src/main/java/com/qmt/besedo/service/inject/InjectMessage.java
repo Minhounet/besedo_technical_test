@@ -1,4 +1,4 @@
-package com.qmt.besedo.service;
+package com.qmt.besedo.service.inject;
 
 import com.qmt.besedo.model.message.Message;
 import com.qmt.besedo.model.response.Response;

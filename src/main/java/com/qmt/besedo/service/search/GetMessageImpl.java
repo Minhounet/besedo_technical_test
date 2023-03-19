@@ -1,4 +1,4 @@
-package com.qmt.besedo.service;
+package com.qmt.besedo.service.search;
 
 import com.qmt.besedo.model.message.Message;
 import com.qmt.besedo.model.operator.SearchOperator;
