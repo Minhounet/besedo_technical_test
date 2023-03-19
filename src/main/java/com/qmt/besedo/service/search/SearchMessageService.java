@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 /**
  * Service to search messages in database.
  */
-public interface GetMessage {
+public interface SearchMessageService {
 
     /**
      * <p>Get all {@link com.qmt.besedo.model.message.Message}s matching the filter conditions on attribute from the {@link com.qmt.besedo.model.message.Message}</p>

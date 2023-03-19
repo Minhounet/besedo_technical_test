@@ -19,7 +19,7 @@ import static com.qmt.besedo.response.Responses.buildResponseWithResultsFromExec
 
 @RequiredArgsConstructor
 @Service
-public class GetMessageImpl implements GetMessage {
+public class SearchMessageServiceImpl implements SearchMessageService {
 
     private final MessageDao messageDao;
 
@@ -34,7 +34,7 @@ public class GetMessageImpl implements GetMessage {
             if (filterAttributeNameAttempt.isSuccess()) {
                 return buildResponseWithResultsFromExecution("query is successful",
                         HttpStatus.OK,
-                        "Error when getting messages",
+                        "Error when getting messages, please contact your administrator",
                         HttpStatus.INTERNAL_SERVER_ERROR,
                         messageDao.getMessageByAttribute(filterValue,
                                 searchOperator,

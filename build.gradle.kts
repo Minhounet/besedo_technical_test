@@ -30,7 +30,9 @@ dependencies {
     // FP
     implementation("io.vavr:vavr:0.10.4")
 
+    // Tests
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.mockito:mockito-core:5.2.0")
 }
 
 tasks.withType<Test> {

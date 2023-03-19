@@ -3,7 +3,7 @@ package com.qmt.besedo.controller;
 import com.qmt.besedo.model.operator.SearchOperator;
 import com.qmt.besedo.model.response.Response;
 import com.qmt.besedo.service.export.ExportReport;
-import com.qmt.besedo.service.search.GetMessage;
+import com.qmt.besedo.service.search.SearchMessageService;
 import com.qmt.besedo.service.inject.InjectMessage;
 import com.qmt.besedo.model.message.Message;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class ApplicationController {
 
     private final InjectMessage injectMessage;
-    private final GetMessage getMessage;
+    private final SearchMessageService searchMessageService;
     private final ExportReport exportReport;
 
     @PostMapping("mails")
@@ -31,7 +31,7 @@ public class ApplicationController {
     public ResponseEntity<Response> getMails(@RequestParam String attribute,
                                              @RequestParam(required = false) SearchOperator operator,
                                              @RequestParam String value) {
-        return getMessage.getMessages(attribute, operator, value);
+        return searchMessageService.getMessages(attribute, operator, value);
     }
 
     @GetMapping("reports/csv")
