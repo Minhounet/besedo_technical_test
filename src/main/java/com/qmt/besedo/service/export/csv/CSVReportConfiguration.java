@@ -9,7 +9,9 @@ import org.springframework.context.annotation.Configuration;
 @Data
 public class CSVReportConfiguration {
 
-    private String id = "id";
+    private String id = "Id";
     private String vowelsCount = "Vowels count";
+
+    private String delimiter = ";";
 }
 

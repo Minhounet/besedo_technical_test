@@ -4,7 +4,7 @@ import com.qmt.besedo.exception.ReportException;
 import com.qmt.besedo.model.message.Message;
 import com.qmt.besedo.repository.MessageDao;
 import com.qmt.besedo.service.export.csv.CSVReportConfiguration;
-import com.qmt.besedo.service.export.csv.CSVWithOutput;
+import com.qmt.besedo.service.export.csv.CSVPrinterWithOutput;
 import com.qmt.besedo.utility.Strings;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
@@ -62,7 +62,7 @@ public class ExportReportServiceImpl implements ExportReportService {
      * @return CSV as array of bytes.
      */
     private Try<byte[]> writeCSV(List<Tuple2<String, Integer>> entries) {
-        return Try.withResources(() -> new CSVWithOutput(csvReportConfiguration)).of(printer -> {
+        return Try.withResources(() -> new CSVPrinterWithOutput(csvReportConfiguration)).of(printer -> {
             entries.forEach(entry -> {
                 try {
                     printer.getCsvPrinter().printRecord(entry._1, entry._2);

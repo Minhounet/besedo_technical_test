@@ -9,18 +9,20 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
-public final class CSVWithOutput implements AutoCloseable {
+/**
+ * Class to wrap both {@link CSVPrinter} and the {@link ByteArrayOutputStream} as output.
+ */
+public final class CSVPrinterWithOutput implements AutoCloseable {
 
     @Getter
     private final CSVPrinter csvPrinter;
     @Getter
     private final ByteArrayOutputStream output = new ByteArrayOutputStream();
 
-
-    public CSVWithOutput(CSVReportConfiguration configuration) throws IOException {
+    public CSVPrinterWithOutput(CSVReportConfiguration configuration) throws IOException {
         CSVFormat csvFormat = CSVFormat.DEFAULT.builder()
                 .setHeader(configuration.getId(), configuration.getVowelsCount())
-                .setDelimiter(';')
+                .setDelimiter(configuration.getDelimiter())
                 .setQuoteMode(QuoteMode.MINIMAL)
                 .build();
         this.csvPrinter = new CSVPrinter(new OutputStreamWriter(output), csvFormat);

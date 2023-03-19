@@ -43,7 +43,7 @@ class ExportReportServiceImplTest {
                 .ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=report.csv")
                 .contentType(MediaType.parseMediaType("application/csv"))
-                .body(new ByteArrayResource("id;Vowels count\r\n".getBytes()));
+                .body(new ByteArrayResource("Id;Vowels count\r\n".getBytes()));
 
         var messageDao = mock(MessageDao.class);
         when(messageDao.getObjects()).thenReturn(Try.success(List.of()));
