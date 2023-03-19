@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.function.Function;
 import java.util.function.ToIntFunction;
+import java.util.function.UnaryOperator;
 
 import static io.vavr.control.Validation.invalid;
 import static io.vavr.control.Validation.valid;
@@ -67,4 +68,9 @@ public class Strings {
      * @see #INTERNAL_GET_VOWELS_COUNT
      */
     public static final Function1<String, Integer> GET_VOWELS_COUNT = INTERNAL_GET_VOWELS_COUNT.memoized();
+
+    /**
+     * Return the incoming String if not blank, return "Unexpected error" otherwise.
+     */
+    public static final UnaryOperator<String> BUILD_ERROR_MESSAGE = error -> null == error || error.isBlank() ? "Unexpected error" : error;
 }

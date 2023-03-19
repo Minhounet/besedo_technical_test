@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import static com.qmt.besedo.response.Responses.buildResponseFromExecution;
+import static com.qmt.besedo.response.Responses.buildNoResultResponseFromExecution;
 import static com.qmt.besedo.utility.Messages.REQUIRE_VALID_MESSAGE;
 
 @RequiredArgsConstructor
@@ -28,7 +28,7 @@ public class InjectMessageServiceImpl implements InjectMessageService {
                     .badRequest()
                     .body(new ErrorResponse("Message is invalid", mailValidation.getError().toJavaList()));
         } else {
-            return buildResponseFromExecution("Message created successfully",
+            return buildNoResultResponseFromExecution("Message created successfully",
                     HttpStatus.CREATED,
                     "Error when injecting message, please contact your administrator",
                     HttpStatus.INTERNAL_SERVER_ERROR,
