@@ -7,9 +7,16 @@ import org.apache.commons.lang3.StringUtils;
 
 import static java.lang.Math.toIntExact;
 
+/**
+ * Utility class for {@link String} objects
+ */
 @UtilityClass
 public class Strings {
 
+    /**
+     * Count nb of vowels excluding "y" which is not a trivial case.
+     * @see #GET_VOWELS_COUNT
+     */
     private static final Function1<String, Integer> INTERNAL_GET_VOWELS_COUNT = string -> {
         var effectiveString = Option.of(string).getOrElse("");
         // We will be able to detect vowels on diacritics for lower and upper cases
@@ -20,5 +27,9 @@ public class Strings {
                 .count());
     };
 
+    /**
+     * Count nb of vowels excluding "y" which is not a trivial case. Function is memoized for better performance.
+     * @see #INTERNAL_GET_VOWELS_COUNT
+     */
     public static final Function1<String, Integer> GET_VOWELS_COUNT = INTERNAL_GET_VOWELS_COUNT.memoized();
 }
