@@ -1,6 +1,7 @@
 package com.qmt.besedo.utility;
 
 import com.qmt.besedo.model.message.Message;
+import io.vavr.Function2;
 import io.vavr.Function3;
 import io.vavr.collection.List;
 import io.vavr.collection.Seq;
@@ -24,13 +25,24 @@ public class Messages {
     private static final Function3<String, Integer, Integer, Validation<String, String>> REQUIRE_VALUE_SIZE_BETWEEN =
             (value, min, max) -> {
                 var size = GET_SIZE.applyAsInt(value);
-                boolean b = size < min || size > max;
-                if (b) {
+                boolean isSizeValid = size < min || size > max;
+                if (isSizeValid) {
                     return invalid("id size is not valid, it should be between %d and %d (current size: %d)".formatted(min, max, size));
                 } else {
                     return valid(value);
                 }
             };
+
+    private static final Function2<String, Integer, Validation<String, String>> REQUIRE_VALUE_SIZE_NOT_EXCEEDING =
+            (value, max) -> {
+                var size = GET_SIZE.applyAsInt(value);
+                if (size > max) {
+                    return invalid("id size is not valid, it should not exceed " + max);
+                } else {
+                    return valid(value);
+                }
+            };
+
 
     /**
      * Test if mail is non-blank and if it is valid.
@@ -64,8 +76,10 @@ public class Messages {
                     .apply(message)
                     .flatMap(mess -> combine(REQUIRE_VALUE_SIZE_BETWEEN.apply(mess.id(), 1, 100),
                             Strings.REQUIRE_ONE_NON_BLANK_FROM_TWO.apply(mess.title(), mess.body(), "title and body are not defined, one of them must be defined at least"),
+                            REQUIRE_VALUE_SIZE_NOT_EXCEEDING.apply(mess.title(), 300),
+                            REQUIRE_VALUE_SIZE_NOT_EXCEEDING.apply(mess.body(), 10000),
                             REQUIRE_VALID_EMAIL.apply(mess.email()))
-                            .ap((id, mailAndBody, email) -> mess));
+                            .ap((id, titleAndBody, title, body,  email) -> mess));
 
 
 }
