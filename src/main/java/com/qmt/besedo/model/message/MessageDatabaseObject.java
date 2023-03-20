@@ -9,11 +9,18 @@ import lombok.Data;
 public class MessageDatabaseObject {
 
     @Id
-    private String internalId;
+    private long internalId;
 
     private String id;
     private String email;
     private String title;
     private String body;
+
+    public Message toMessage() {
+        return new Message(this.getId(),
+                this.getEmail(),
+                this.getTitle(),
+                this.getBody());
+    }
 
 }

@@ -1,7 +1,8 @@
-package com.qmt.besedo.repository;
+package com.qmt.besedo.repository.list;
 
 import com.qmt.besedo.model.message.Message;
 import com.qmt.besedo.model.operator.SearchOperator;
+import com.qmt.besedo.repository.MessageDao;
 import io.vavr.control.Try;
 import org.springframework.stereotype.Repository;
 
@@ -14,7 +15,7 @@ import java.util.function.Predicate;
  * Basic database where objects are stored in {@link CopyOnWriteArrayList} to handle concurrency.
  */
 @Repository
-public class InMemoryDatabase implements MessageDao {
+public class ObjectsListDao implements MessageDao {
 
     private final List<Message> objects = new CopyOnWriteArrayList<>();
 

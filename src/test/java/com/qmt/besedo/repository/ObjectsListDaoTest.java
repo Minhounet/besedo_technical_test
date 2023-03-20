@@ -2,23 +2,24 @@ package com.qmt.besedo.repository;
 
 import com.qmt.besedo.model.message.Message;
 import com.qmt.besedo.model.operator.SearchOperator;
+import com.qmt.besedo.repository.list.ObjectsListDao;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class InMemoryDatabaseTest {
+class ObjectsListDaoTest {
 
     @Test
     void getObjects_EXPECTED_non_null_list() {
-        assertNotNull(new InMemoryDatabase().getObjects());
+        assertNotNull(new ObjectsListDao().getObjects());
     }
 
     @Test
     void injectMessage_WITH_Message_EXPECTED_same_Message() {
         var message = new Message("id", "email", "title", "body");
-        assertEquals(message, new InMemoryDatabase().injectMessage(message).get());
+        assertEquals(message, new ObjectsListDao().injectMessage(message).get());
     }
 
 
@@ -28,7 +29,7 @@ class InMemoryDatabaseTest {
         var message1 = new Message("notid", "email", "title", "body");
         var message2 = new Message("id", "email2", "title", "body");
 
-        InMemoryDatabase database = new InMemoryDatabase();
+        ObjectsListDao database = new ObjectsListDao();
         database.injectMessage(message0);
         database.injectMessage(message1);
         database.injectMessage(message2);
@@ -47,7 +48,7 @@ class InMemoryDatabaseTest {
         var message1 = new Message("notid", "email", "title", "body");
         var message2 = new Message("id", "email2", "title", "body");
 
-        InMemoryDatabase database = new InMemoryDatabase();
+        ObjectsListDao database = new ObjectsListDao();
         database.injectMessage(message0);
         database.injectMessage(message1);
         database.injectMessage(message2);
@@ -61,7 +62,7 @@ class InMemoryDatabaseTest {
         var message1 = new Message("notid", "email", "title", "body");
         var message2 = new Message("idea", "email2", "title", "body");
 
-        InMemoryDatabase database = new InMemoryDatabase();
+        ObjectsListDao database = new ObjectsListDao();
         database.injectMessage(message0);
         database.injectMessage(message1);
         database.injectMessage(message2);
@@ -80,7 +81,7 @@ class InMemoryDatabaseTest {
         var message1 = new Message("oh id ohoho", "email", "title", "body");
         var message2 = new Message("idea", "email2", "title", "body");
 
-        InMemoryDatabase database = new InMemoryDatabase();
+        ObjectsListDao database = new ObjectsListDao();
         database.injectMessage(message0);
         database.injectMessage(message1);
         database.injectMessage(message2);
