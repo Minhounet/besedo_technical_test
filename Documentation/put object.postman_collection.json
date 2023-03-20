@@ -1,0 +1,57 @@
+{
+	"info": {
+		"_postman_id": "a006f1d0-3b5c-48df-b877-3471303871e4",
+		"name": "put object",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26414847"
+	},
+	"item": [
+		{
+			"name": "put message",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"id\": \"{{$guid}}\",\r\n\"email\": \"{{$randomEmail}}\",\r\n\"title\": \"{{$randomPhrase}}\",\r\n\"body\": \"{{$randomLoremParagraph}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/messages",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"messages"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
