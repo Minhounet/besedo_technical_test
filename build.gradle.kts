@@ -20,6 +20,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.4")
     implementation("org.springframework.boot:spring-boot-starter-validation:3.0.4")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.0.4")
+    implementation("com.h2database:h2:2.1.214")
 
     // Lombok
     implementation("io.freefair.lombok:io.freefair.lombok.gradle.plugin:6.6.3")
