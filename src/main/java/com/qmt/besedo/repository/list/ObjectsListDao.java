@@ -1,6 +1,7 @@
 package com.qmt.besedo.repository.list;
 
-import com.qmt.besedo.model.message.Message;
+import com.qmt.besedo.model.message.MessageAttributeName;
+import com.qmt.besedo.model.message.MessageDatabaseObject;
 import com.qmt.besedo.model.operator.SearchOperator;
 import com.qmt.besedo.repository.MessageDao;
 import io.vavr.control.Try;
@@ -8,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -17,21 +17,21 @@ import java.util.function.Predicate;
 @Repository
 public class ObjectsListDao implements MessageDao {
 
-    private final List<Message> objects = new CopyOnWriteArrayList<>();
+    private final List<MessageDatabaseObject> objects = new CopyOnWriteArrayList<>();
 
     @Override
-    public Try<Message> injectMessage(Message message) {
+    public Try<MessageDatabaseObject> injectMessage(MessageDatabaseObject entity) {
         return Try.of(() -> {
-            objects.add(message);
-            return message;
+            objects.add(entity);
+            return entity;
         });
     }
 
     @Override
-    public Try<List<Message>> getMessageByAttribute(String value, SearchOperator operator, Function<Message, String> getFieldValue) {
+    public Try<List<MessageDatabaseObject>> getMessageByAttribute(MessageAttributeName attributeName, SearchOperator operator, String value) {
         return Try.of(() -> {
-            Predicate<Message> doesValueMatch = message -> {
-                String fieldValue = getFieldValue.apply(message);
+            Predicate<MessageDatabaseObject> doesValueMatch = messageDatabaseObject -> {
+                String fieldValue = attributeName.getMessageDatabaseObjectAttributeFn().apply(messageDatabaseObject);
                 return switch (operator) {
                     case CONTAINS -> fieldValue.contains(value);
                     case STARTS_WITH -> fieldValue.startsWith(value);
@@ -45,7 +45,7 @@ public class ObjectsListDao implements MessageDao {
     }
 
     @Override
-    public Try<List<Message>> getObjects() {
+    public Try<List<MessageDatabaseObject>> getObjects() {
         return Try.of(() -> objects);
     }
 

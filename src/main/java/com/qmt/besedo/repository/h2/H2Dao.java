@@ -1,7 +1,8 @@
 package com.qmt.besedo.repository.h2;
 
-import com.qmt.besedo.model.message.Message;
+import com.qmt.besedo.model.message.MessageAttributeName;
 import com.qmt.besedo.model.message.MessageDatabaseObject;
+import com.qmt.besedo.model.operator.SearchOperator;
 import com.qmt.besedo.repository.MessageDao;
 import io.vavr.control.Try;
 import lombok.RequiredArgsConstructor;
@@ -9,23 +10,25 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 
 @RequiredArgsConstructor
-public abstract class H2Dao implements MessageDao {
+public class H2Dao implements MessageDao {
 
     private final MessageRepository messageRepository;
 
     @Override
-    public Try<Message> injectMessage(Message message) {
+    public Try<MessageDatabaseObject> injectMessage(MessageDatabaseObject entity) {
         return Try.of(() -> {
-            messageRepository.saveAndFlush(message.toDatabaseObject());
-            return message;
+            messageRepository.saveAndFlush(entity);
+            return entity;
         });
     }
 
     @Override
-    public Try<List<Message>> getObjects() {
-        return Try.of(() -> messageRepository
-                .findAll().stream()
-                .map(MessageDatabaseObject::toMessage)
-                .toList());
+    public Try<List<MessageDatabaseObject>> getMessageByAttribute(MessageAttributeName attributeName, SearchOperator operator, String value) {
+        return null;
+    }
+
+    @Override
+    public Try<List<MessageDatabaseObject>> getObjects() {
+        return Try.of(messageRepository::findAll);
     }
 }

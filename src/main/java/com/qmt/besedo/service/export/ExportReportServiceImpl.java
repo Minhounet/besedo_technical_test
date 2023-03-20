@@ -2,6 +2,7 @@ package com.qmt.besedo.service.export;
 
 import com.qmt.besedo.exception.ReportException;
 import com.qmt.besedo.model.message.Message;
+import com.qmt.besedo.model.message.MessageDatabaseObject;
 import com.qmt.besedo.repository.MessageDao;
 import com.qmt.besedo.service.export.csv.CSVReportConfiguration;
 import com.qmt.besedo.service.export.csv.CSVPrinterWithOutput;
@@ -33,6 +34,7 @@ public class ExportReportServiceImpl implements ExportReportService {
     public ResponseEntity<ByteArrayResource> getCVSReport() {
         Function<MessageDao, List<Message>> getAllMessages = dao ->  dao.getObjects()
                 .getOrElseThrow(cause -> new ReportException("Error when getting all objects", cause)).stream()
+                .map(MessageDatabaseObject::toMessage)
                 .toList();
 
         Function<List<Message>, List<Tuple2<String, Integer>>> enrichMessagesWithVowelsCount = messages ->

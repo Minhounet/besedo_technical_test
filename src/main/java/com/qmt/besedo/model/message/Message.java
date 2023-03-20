@@ -4,10 +4,10 @@ public record Message(String id, String email, String title, String body) {
 
     public MessageDatabaseObject toDatabaseObject() {
         MessageDatabaseObject databaseObject = new MessageDatabaseObject();
-        databaseObject.setBody(this.body());
         databaseObject.setId(this.id());
-        databaseObject.setBody(this.title());
+        databaseObject.setEmail(this.email());
         databaseObject.setBody(this.body());
+        databaseObject.setTitle(this.title());
         return databaseObject;
     }
 }

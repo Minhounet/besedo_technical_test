@@ -1,5 +1,6 @@
 package com.qmt.besedo.controller;
 
+import com.qmt.besedo.model.message.MessageAttributeName;
 import com.qmt.besedo.model.operator.SearchOperator;
 import com.qmt.besedo.model.response.Response;
 import com.qmt.besedo.service.export.ExportReportService;
@@ -29,8 +30,8 @@ public class ApplicationController {
     }
 
     @GetMapping("/messages")
-    public ResponseEntity<Response> getMails(@RequestParam String attribute,
-                                             @RequestParam(required = false) SearchOperator operator,
+    public ResponseEntity<Response> getMails(@RequestParam MessageAttributeName attribute,
+                                             @RequestParam SearchOperator operator,
                                              @RequestParam String value) {
         return searchMessageService.getMessages(attribute, operator, value);
     }

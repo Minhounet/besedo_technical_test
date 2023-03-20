@@ -32,7 +32,7 @@ public class InjectMessageServiceImpl implements InjectMessageService {
                     HttpStatus.CREATED,
                     "Error when injecting message, please contact your administrator",
                     HttpStatus.INTERNAL_SERVER_ERROR,
-                    messageDao.injectMessage(message));
+                    messageDao.injectMessage(message.toDatabaseObject()));
         }
 
     }

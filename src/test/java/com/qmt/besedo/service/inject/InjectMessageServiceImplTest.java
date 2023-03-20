@@ -1,6 +1,7 @@
 package com.qmt.besedo.service.inject;
 
 import com.qmt.besedo.model.message.Message;
+import com.qmt.besedo.model.message.MessageDatabaseObject;
 import com.qmt.besedo.model.response.ErrorResponse;
 import com.qmt.besedo.model.response.SuccessResponse;
 import com.qmt.besedo.repository.MessageDao;
@@ -33,7 +34,15 @@ class InjectMessageServiceImplTest {
                 .status(HttpStatus.CREATED)
                 .body(new SuccessResponse("Message created successfully"));
         MessageDao messageDao = mock(MessageDao.class);
-        when(messageDao.injectMessage(any())).thenReturn(Try.success(new Message("id", "besedo@gmail.com", "besedo", null)));
+
+        var entity = new MessageDatabaseObject();
+        entity.setInternalId(1);
+        entity.setId("id");
+        entity.setEmail("besedo@gmail.com");
+        entity.setTitle("besedo");
+        entity.setBody(null);
+
+        when(messageDao.injectMessage(any())).thenReturn(Try.success(entity));
         var service = new InjectMessageServiceImpl(messageDao);
         assertEquals(expected, service.inject(new Message("id", "besedo@gmail.com", "besedo", null)));
     }
