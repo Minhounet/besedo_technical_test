@@ -5,6 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
+/**
+ * The interface to request the H2 database.
+ */
 public interface MessageRepository extends JpaRepository<MessageDatabaseObject, Long> {
 
     List<MessageDatabaseObject> findByEmail(String email);
@@ -15,7 +18,6 @@ public interface MessageRepository extends JpaRepository<MessageDatabaseObject, 
     List<MessageDatabaseObject> findByBodyStartsWith(String body);
     List<MessageDatabaseObject> findByBodyContains(String body);
 
-
     List<MessageDatabaseObject> findById(String id);
     List<MessageDatabaseObject> findByIdStartsWith(String id);
     List<MessageDatabaseObject> findByIdContains(String id);
@@ -23,6 +25,4 @@ public interface MessageRepository extends JpaRepository<MessageDatabaseObject, 
     List<MessageDatabaseObject> findByTitle(String title);
     List<MessageDatabaseObject> findByTitleStartsWith(String title);
     List<MessageDatabaseObject> findByTitleContains(String title);
-
-
 }
