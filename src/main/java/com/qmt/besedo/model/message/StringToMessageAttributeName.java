@@ -6,6 +6,10 @@ import io.vavr.control.Try;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+/**
+ * return a {@link MessageAttributeName} from a {@link String} representing an attribute name.
+ * c
+ */
 @Component
 public class StringToMessageAttributeName implements Converter<String, MessageAttributeName> {
     @Override

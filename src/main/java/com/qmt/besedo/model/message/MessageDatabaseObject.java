@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
+/**
+ * The message in a true database.
+ */
 @Entity
 @Data
 public class MessageDatabaseObject {
