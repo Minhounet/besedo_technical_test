@@ -13,6 +13,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 /**
  * Entry point to rest call.
  */
@@ -54,9 +56,30 @@ public class ApplicationController {
         return searchMessageService.getMessages(attribute, operator, value, pageRequest);
     }
 
-    @GetMapping("/reports/csv")
-    public ResponseEntity<ByteArrayResource> getCSVReport() {
-        return exportReportService.getCVSReport();
+    /**
+     * @return generated request id to get the report when it is done. If request has already been done, inform end user.
+     */
+    @PostMapping("/reports/csv/request")
+    public ResponseEntity<Response> requestReport() {
+        return exportReportService.requestCSVReport();
+    }
+
+    /**
+     *
+     * @param requestId the request id to get the report
+     * @return Response indicating is csv is being generated or not. If request is not valid, return an error.
+     */
+    @GetMapping("/reports/csv/request")
+    public ResponseEntity<Response> getRequest(@RequestParam String requestId) {
+        return exportReportService.getRequest(UUID.fromString(requestId));
+    }
+
+    /**
+     * @return the CSV report when it is ready, null otherwise
+     */
+    @GetMapping("/reports/csv/content")
+    public ResponseEntity<ByteArrayResource> getReport(@RequestParam String requestId) {
+        return exportReportService.getCVSReport(requestId);
     }
 
 }

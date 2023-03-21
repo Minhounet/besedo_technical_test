@@ -24,7 +24,7 @@ class ExportReportServiceImplTest {
         var messageDao = mock(MessageDao.class);
         when(messageDao.getObjects()).thenReturn(Try.failure(new RuntimeException("any technical error")));
         var service = new ExportReportServiceImpl(null, messageDao);
-        ReportException reportException = assertThrows(ReportException.class, service::getCVSReport);
+        ReportException reportException = assertThrows(ReportException.class, () -> service.getCVSReport(null));
         assertEquals("Error when getting all objects", reportException.getMessage());
     }
 
@@ -33,7 +33,7 @@ class ExportReportServiceImplTest {
         var messageDao = mock(MessageDao.class);
         when(messageDao.getObjects()).thenReturn(Try.success(List.of()));
         var service = new ExportReportServiceImpl(null, messageDao); // null configuration make the csv writing fail :D
-        ReportException reportException = assertThrows(ReportException.class, service::getCVSReport);
+        ReportException reportException = assertThrows(ReportException.class, () -> service.getCVSReport(null));
         assertEquals("Error when writing csv report", reportException.getMessage());
     }
 
@@ -48,6 +48,6 @@ class ExportReportServiceImplTest {
         var messageDao = mock(MessageDao.class);
         when(messageDao.getObjects()).thenReturn(Try.success(List.of()));
         var service = new ExportReportServiceImpl(new CSVReportConfiguration(), messageDao); // null configuration make the csv writing fail :D
-        assertEquals(expected, service.getCVSReport());
+        assertEquals(expected, service.getCVSReport(null));
     }
 }
