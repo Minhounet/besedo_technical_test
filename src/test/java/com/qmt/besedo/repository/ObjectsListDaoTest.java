@@ -4,7 +4,10 @@ import com.qmt.besedo.model.message.MessageAttributeName;
 import com.qmt.besedo.model.message.MessageDatabaseObject;
 import com.qmt.besedo.model.operator.SearchOperator;
 import com.qmt.besedo.repository.list.ObjectsListDao;
+import com.qmt.besedo.service.search.SearchResults;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -52,12 +55,12 @@ class ObjectsListDaoTest {
         database.injectMessage(message1);
         database.injectMessage(message2);
 
-        List<MessageDatabaseObject> results = database.getMessageByAttribute(MessageAttributeName.ID, SearchOperator.EQUALS, "id").get();
+        SearchResults searchResults = database.getMessageByAttribute(MessageAttributeName.ID, SearchOperator.EQUALS, "id", PageRequest.of(1,1)).get();
 
         // Message is not comparable, use bold assert.
-        assertEquals(2, results.size());
-        assertTrue(results.contains(message0));
-        assertTrue(results.contains(message2));
+        assertEquals(2, searchResults.maxResultsCount());
+        assertTrue(searchResults.results().contains(message0));
+        assertTrue(searchResults.results().contains(message2));
     }
 
     @Test
@@ -71,7 +74,8 @@ class ObjectsListDaoTest {
         database.injectMessage(message1);
         database.injectMessage(message2);
 
-        assertEquals(List.of(), database.getMessageByAttribute(MessageAttributeName.ID, SearchOperator.EQUALS, "besedo besedo mucho").get());
+        SearchResults actual = database.getMessageByAttribute(MessageAttributeName.ID, SearchOperator.EQUALS, "besedo besedo mucho",PageRequest.of(0,3)).get();
+        assertEquals(List.of(), actual.results());
     }
 
     @Test
@@ -85,12 +89,12 @@ class ObjectsListDaoTest {
         database.injectMessage(message1);
         database.injectMessage(message2);
 
-        List<MessageDatabaseObject> results = database.getMessageByAttribute(MessageAttributeName.ID, SearchOperator.STARTS_WITH, "id").get();
+        SearchResults searchResults = database.getMessageByAttribute(MessageAttributeName.ID, SearchOperator.STARTS_WITH, "id", PageRequest.of(1,1)).get();
 
         // Message is not comparable, use bold assert.
-        assertEquals(2, results.size());
-        assertTrue(results.contains(message0));
-        assertTrue(results.contains(message2));
+        assertEquals(2, searchResults.maxResultsCount());
+        assertTrue(searchResults.results().contains(message0));
+        assertTrue(searchResults.results().contains(message2));
     }
 
     @Test
@@ -104,12 +108,12 @@ class ObjectsListDaoTest {
         database.injectMessage(message1);
         database.injectMessage(message2);
 
-        List<MessageDatabaseObject> results = database.getMessageByAttribute(MessageAttributeName.ID, SearchOperator.CONTAINS, "id").get();
+        SearchResults searchResults = database.getMessageByAttribute(MessageAttributeName.ID, SearchOperator.CONTAINS, "id", PageRequest.of(1,10)).get();
 
         // Message is not comparable, use bold assert.
-        assertEquals(3, results.size());
-        assertTrue(results.contains(message0));
-        assertTrue(results.contains(message1));
-        assertTrue(results.contains(message2));
+        assertEquals(3, searchResults.maxResultsCount());
+        assertTrue(searchResults.results().contains(message0));
+        assertTrue(searchResults.results().contains(message1));
+        assertTrue(searchResults.results().contains(message2));
     }
 }

@@ -1,10 +1,14 @@
 package com.qmt.besedo.response;
 
+import com.qmt.besedo.model.message.Message;
+import com.qmt.besedo.model.message.MessageDatabaseObject;
 import com.qmt.besedo.model.response.ErrorResponse;
 import com.qmt.besedo.model.response.Response;
 import com.qmt.besedo.model.response.SuccessResponse;
 import com.qmt.besedo.model.response.SuccessResponseWithResults;
+import com.qmt.besedo.service.search.SearchResults;
 import com.qmt.besedo.utility.Strings;
+import io.vavr.Tuple2;
 import io.vavr.control.Try;
 import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
@@ -43,16 +47,15 @@ public class Responses {
     }
 
 
-
     /**
      * Build {@link ResponseEntity} with a {@link Response} handling success or error in the block execution. List of results
-     * is included in the {@link ResponseEntity}
+     * is included in the {@link ResponseEntity}. Also add pagination information in headers to keep a clean response.
      *
      * @param successMessage the message in case of success
      * @param successStatus  the status in case of success
      * @param errorMessage   the message in case of error
      * @param errorStatus    the status in case or error
-     * @param block          the {@link Try} execution
+     * @param block          the {@link Try} execution containing the max nb of results and the partial results (pagination).
      * @param <E>            the returning type in the block execution.
      * @return {@link ResponseEntity} with a {@link Response} including a List of results
      */
@@ -60,10 +63,20 @@ public class Responses {
                                                                                      HttpStatus successStatus,
                                                                                      String errorMessage,
                                                                                      HttpStatus errorStatus,
-                                                                                     Try<List<E>> block) {
-        return buildResponseFromExecution(errorMessage, errorStatus, block, mess -> ResponseEntity
-                .status(successStatus)
-                .body(new SuccessResponseWithResults<>(successMessage, mess)));
+                                                                                     Try<SearchResults> block) {
+
+        Function<List<MessageDatabaseObject>, List<Message>> mapToMessages = results -> results.stream()
+                .map(MessageDatabaseObject::toMessage)
+                .toList();
+
+        return buildResponseFromExecution(errorMessage, errorStatus, block, searchResults ->
+                ResponseEntity
+                        .status(successStatus)
+                        .header("x-total-count", Integer.toString(searchResults.maxResultsCount()))
+                        .header("x-total-pages", Integer.toString(searchResults.totalPages()))
+                        .header("x-current-page", Integer.toString(searchResults.currentPage()))
+                        .body(new SuccessResponseWithResults<>(successMessage, mapToMessages.apply(searchResults.results()))));
+
     }
 
     private static <E> ResponseEntity<Response> buildResponseFromExecution(String errorMessage,

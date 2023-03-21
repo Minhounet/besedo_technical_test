@@ -4,6 +4,7 @@ import com.qmt.besedo.model.response.ErrorResponse;
 import com.qmt.besedo.model.response.Response;
 import com.qmt.besedo.model.response.SuccessResponse;
 import com.qmt.besedo.model.response.SuccessResponseWithResults;
+import com.qmt.besedo.service.search.SearchResults;
 import io.vavr.control.Try;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -68,14 +69,17 @@ class ResponsesTest {
     void buildResponseWithResultsFromExecution_WITH_success_execution_EXPECTED_SuccessResponse() {
         ResponseEntity<Response> expected = ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new SuccessResponseWithResults<>("success is key", List.of("success")));
+                .header("x-total-count","1")
+                .header("x-total-pages","1")
+                .header("x-current-page","1")
+                .body(new SuccessResponseWithResults<>("success is key", List.of()));
 
 
         ResponseEntity<Response> actual = buildResponseWithResultsFromExecution("success is key",
                 HttpStatus.OK,
                 "Error in my life",
                 HttpStatus.BAD_GATEWAY,
-                Try.success(List.of("success")));
+                Try.success(new SearchResults(List.of(), 1, 1, 1)));
 
         assertEquals(expected, actual);
     }
