@@ -7,7 +7,6 @@ import com.qmt.besedo.repository.list.ObjectsListDao;
 import com.qmt.besedo.service.search.SearchResults;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 

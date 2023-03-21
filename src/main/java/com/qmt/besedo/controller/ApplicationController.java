@@ -47,11 +47,11 @@ public class ApplicationController {
      * @return Response containing the list of results using a pagination
      */
     @GetMapping("/messages")
-    public ResponseEntity<Response> getMails(@RequestParam MessageAttributeName attribute,
-                                             @RequestParam SearchOperator operator,
-                                             @RequestParam String value,
-                                             @RequestParam(defaultValue = "0") int pageIndex,
-                                             @RequestParam(defaultValue = "100") int pageSize) {
+    public ResponseEntity<Response> getMessages(@RequestParam MessageAttributeName attribute,
+                                                @RequestParam SearchOperator operator,
+                                                @RequestParam String value,
+                                                @RequestParam(defaultValue = "0") int pageIndex,
+                                                @RequestParam(defaultValue = "100") int pageSize) {
         var pageRequest = PageRequest.of(pageIndex, pageSize);
         return searchMessageService.getMessages(attribute, operator, value, pageRequest);
     }
@@ -60,8 +60,8 @@ public class ApplicationController {
      * @return generated request id to get the report when it is done. If request has already been done, inform end user.
      */
     @PostMapping("/reports/csv/request")
-    public ResponseEntity<Response> requestReport() {
-        return exportReportService.requestCSVReport();
+    public ResponseEntity<Response> launchReportGeneration() {
+        return exportReportService.launchReportGeneration();
     }
 
     /**
@@ -70,16 +70,16 @@ public class ApplicationController {
      * @return Response indicating is csv is being generated or not. If request is not valid, return an error.
      */
     @GetMapping("/reports/csv/request")
-    public ResponseEntity<Response> getRequest(@RequestParam String requestId) {
-        return exportReportService.getRequest(UUID.fromString(requestId));
+    public ResponseEntity<Response> getRequestStatus(@RequestParam String requestId) {
+        return exportReportService.getRequestStatus(UUID.fromString(requestId));
     }
 
     /**
      * @return the CSV report when it is ready, null otherwise
      */
     @GetMapping("/reports/csv/content")
-    public ResponseEntity<ByteArrayResource> getReport(@RequestParam String requestId) {
-        return exportReportService.getCVSReport(requestId);
+    public ResponseEntity<ByteArrayResource> downloadReport(@RequestParam String requestId) {
+        return exportReportService.getReport(requestId);
     }
 
 }

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * Return a {@link SearchOperator} from its {@link String} value.
- * @see com.qmt.besedo.controller.ApplicationController#getMails(MessageAttributeName, SearchOperator, String)
+ * @see com.qmt.besedo.controller.ApplicationController#getMessages(MessageAttributeName, SearchOperator, String, int, int)
  */
 @Component
 public class StringToSearchOperator implements Converter<String, SearchOperator> {

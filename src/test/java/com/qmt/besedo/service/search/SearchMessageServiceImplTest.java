@@ -8,7 +8,6 @@ import com.qmt.besedo.model.response.SuccessResponseWithResults;
 import com.qmt.besedo.repository.MessageDao;
 import io.vavr.control.Try;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 

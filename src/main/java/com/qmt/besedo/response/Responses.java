@@ -8,7 +8,6 @@ import com.qmt.besedo.model.response.SuccessResponse;
 import com.qmt.besedo.model.response.SuccessResponseWithResults;
 import com.qmt.besedo.service.search.SearchResults;
 import com.qmt.besedo.utility.Strings;
-import io.vavr.Tuple2;
 import io.vavr.control.Try;
 import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
@@ -56,14 +55,13 @@ public class Responses {
      * @param errorMessage   the message in case of error
      * @param errorStatus    the status in case or error
      * @param block          the {@link Try} execution containing the max nb of results and the partial results (pagination).
-     * @param <E>            the returning type in the block execution.
      * @return {@link ResponseEntity} with a {@link Response} including a List of results
      */
-    public static <E> ResponseEntity<Response> buildResponseWithResultsFromExecution(String successMessage,
-                                                                                     HttpStatus successStatus,
-                                                                                     String errorMessage,
-                                                                                     HttpStatus errorStatus,
-                                                                                     Try<SearchResults> block) {
+    public static ResponseEntity<Response> buildResponseWithResultsFromExecution(String successMessage,
+                                                                                 HttpStatus successStatus,
+                                                                                 String errorMessage,
+                                                                                 HttpStatus errorStatus,
+                                                                                 Try<SearchResults> block) {
 
         Function<List<MessageDatabaseObject>, List<Message>> mapToMessages = results -> results.stream()
                 .map(MessageDatabaseObject::toMessage)
@@ -79,6 +77,15 @@ public class Responses {
 
     }
 
+    /**
+     *
+     * @param errorMessage the error message
+     * @param errorStatus the {@link HttpStatus} error
+     * @param block the execution
+     * @param successCallback callback called when execution is a success
+     * @return ResponseEntity containing the response
+     * @param <E> the returning type of the execution
+     */
     private static <E> ResponseEntity<Response> buildResponseFromExecution(String errorMessage,
                                                                            HttpStatus errorStatus,
                                                                            Try<E> block,

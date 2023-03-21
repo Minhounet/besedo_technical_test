@@ -16,17 +16,17 @@ public interface ExportReportService {
      *
      * @return the {@link com.qmt.besedo.model.message.Message} as a CSV file.
      */
-    ResponseEntity<ByteArrayResource> getCVSReport(String requestId);
+    ResponseEntity<ByteArrayResource> getReport(String requestId);
 
     /**
      * @return the request id to get the csv report when it is available.
      */
-    ResponseEntity<Response> requestCSVReport();
+    ResponseEntity<Response> launchReportGeneration();
 
     /**
      * Test if requestId exists.
      * @param requestId the request id.
      * @return Response
      */
-    ResponseEntity<Response> getRequest(UUID requestId);
+    ResponseEntity<Response> getRequestStatus(UUID requestId);
 }
