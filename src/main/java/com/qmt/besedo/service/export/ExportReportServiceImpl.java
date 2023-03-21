@@ -58,25 +58,31 @@ public class ExportReportServiceImpl implements ExportReportService {
 
     @Override
     public ResponseEntity<Response> launchReportGeneration() {
+        ResponseEntity<Response> responseEntity;
+        boolean startProcessAfterRequest = false; // Sneaky way to launch future out from synchronized part.
         synchronized (this) {
             if (null == csvRequestId) {
                 csvRequestId = UUID.randomUUID();
-                Future.run(this::generateReport);
-                return ResponseEntity
+                startProcessAfterRequest = true;
+                responseEntity = ResponseEntity
                         .accepted()
                         .body(new SuccessResponse(csvRequestId.toString()));
             } else {
-                return ResponseEntity
+                responseEntity = ResponseEntity
                         .ok()
                         .body(new SuccessResponse(csvRequestId + " is processing, must wait for it termination"));
             }
         }
+        if (startProcessAfterRequest) {
+            Future.run(this::generateReport);
+        }
+        return responseEntity;
     }
 
     /**
      * Generate CSV report.
      */
-    synchronized void generateReport() {
+    void generateReport() {
         available = false;
         Function<MessageDao, List<Message>> getAllMessages = dao -> dao.getObjects()
                 .getOrElseThrow(cause -> new ReportException("Error when getting all objects", cause)).stream()
