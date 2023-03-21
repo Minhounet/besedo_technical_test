@@ -11,4 +11,6 @@ public class DataGeneratorConfiguration {
 
     private boolean populateDatabase = false;
 
+    private int dataCount = 1000;
+
 }
